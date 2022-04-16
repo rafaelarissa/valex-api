@@ -1,10 +1,11 @@
 import * as companyRepository from "../repositories/companyRepository.js";
-import * as unauthorizedError from "../middlewares/handleErrors.js";
+import * as handleErrors from "../middlewares/handleErrors.js";
 
-export default async function validateApiKey(apiKey: string) {
-  const company = companyRepository.findByApiKey(apiKey);
+export async function validateApiKey(apiKey: string) {
+  const company = await companyRepository.findByApiKey(apiKey);
+  console.log(company);
 
-  if(!company) throw unauthorizedError('x-api-key');
+  if (!company) throw handleErrors.unauthorizedError("x-api-key");
 
   return company;
 }

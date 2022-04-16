@@ -1,10 +1,21 @@
 import { Request, Response, NextFunction } from "express";
-import { unauthorizedError } from "./handleErrors";
+import * as handleErrors from "./handleErrors.js";
+import * as companyService from "../services/companyService.js";
 
-export async function validateApiKey(req: Request, res: Response, next: NextFunction) {
-  const apiKey = req.headers['x-api-key'];
-  
-  if(!apiKey) throw unauthorizedError('x-api-key');
+export default async function validateApiKey(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const apiKey = req.headers["x-api-key"];
+  console.log("cheguei aqui pra checar se existe api key");
+  console.log(apiKey);
 
-  // const company = await companyService.
+  if (!apiKey) throw handleErrors.unauthorizedError("x-api-key");
+
+  const company = await companyService.validateApiKey(apiKey.toString());
+  console.log(company);
+  res.locals.company = company;
+
+  next();
 }
