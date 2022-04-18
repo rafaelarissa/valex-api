@@ -7,7 +7,7 @@ import * as cardController from "../controllers/cardController.js";
 const cardRouter = Router();
 
 cardRouter.post(
-  "/card",
+  "/card/:employeeId/create",
   validateApiKey,
   validateSchemaMiddleware(cardSchema),
   cardController.createCard
