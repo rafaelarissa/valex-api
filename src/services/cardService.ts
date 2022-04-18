@@ -1,26 +1,21 @@
 import * as cardRepository from "../repositories/cardRepository.js";
 import * as handleError from "../middlewares/handleErrors.js";
+import { checkCardValidation } from "../utils/cardUtils.js";
 import { faker } from "@faker-js/faker";
 //gerar dados do cartão aqui
 
 export function setCardNumber() {
   let number = faker.finance.creditCardNumber("mastercard");
-  // let isNumber = valid_card(number);
+  let isNumber = checkCardValidation(number);
 
-  // while (number[0].toString() === '6' || !isNumber) {
-  // 	number = faker.finance.creditCardNumber('mastercard');
-  // 	isNumber = valid_card(number);
+  while (!isNumber) {
+    number = faker.finance.creditCardNumber("mastercard");
+    isNumber = checkCardValidation(number);
 
-  // 	if (number[0].toString() === '5' && isNumber) {
-  // 		break;
-  // 	}
-  // }
-
-  // if (number[0].toString() === '5') {
-  // 	while (!isNumber) {
-  // 		isNumber = valid_credit_card(number);
-  // 	}
-  // }
+    if (isNumber) {
+      break;
+    }
+  }
 
   return number.split("-").join("");
 }
