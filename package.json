@@ -23,6 +23,7 @@
   "dependencies": {
     "@types/pg": "^8.6.5",
     "cors": "^2.8.5",
+    "cryptr": "^6.0.2",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-async-errors": "^3.1.1",

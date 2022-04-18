@@ -2,7 +2,9 @@ import * as cardRepository from "../repositories/cardRepository.js";
 import * as handleError from "../middlewares/handleErrors.js";
 import { checkCardValidation } from "../utils/cardUtils.js";
 import { faker } from "@faker-js/faker";
-//gerar dados do cartão aqui
+
+const Cryptr = require("cryptr");
+const cryptr = new Cryptr("myTotalySecretKey");
 
 export function setCardNumber() {
   let number = faker.finance.creditCardNumber("mastercard");
@@ -18,6 +20,12 @@ export function setCardNumber() {
   }
 
   return number.split("-").join("");
+}
+
+export function setCardCVV() {
+  const cvv = faker.finance.creditCardCVV();
+
+  return cryptr.encrypt(cvv);
 }
 
 export async function searchCardByTypeAndEmployeeId(type, employeeId: number) {
