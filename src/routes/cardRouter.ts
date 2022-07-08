@@ -7,10 +7,10 @@ import * as cardController from "../controllers/cardController.js";
 const cardRouter = Router();
 
 cardRouter.post(
-  "/card/:employeeId/create",
+  "/cards/create",
   validateApiKey,
   validateSchemaMiddleware(cardSchema),
-  cardController.createCard
+  cardController.create
 );
 
 export default cardRouter;

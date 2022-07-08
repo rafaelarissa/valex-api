@@ -1,10 +1,21 @@
 import * as cardRepository from "../repositories/cardRepository.js";
 import * as handleError from "../middlewares/handleErrors.js";
-import { checkCardValidation } from "../utils/cardUtils.js";
+import * as companyService from "../services/companyService.js";
+import * as employeeService from "../services/employeeService";
+import { checkCardValidation } from "../../utils/cardUtils.js";
 import { faker } from "@faker-js/faker";
 
 const Cryptr = require("cryptr");
-const cryptr = new Cryptr("myTotalySecretKey");
+const cryptr = new Cryptr(process.env.secret);
+
+export async function create(
+  apiKey: string,
+  employeeId: number,
+  type: cardRepository.TransactionTypes
+) {
+  await companyService.validateApiKey(apiKey);
+  await employeeService.validateEmployee(employeeId);
+}
 
 export function setCardNumber() {
   let number = faker.finance.creditCardNumber("mastercard");
@@ -27,6 +38,8 @@ export function setCardCVV() {
 
   return cryptr.encrypt(cvv);
 }
+
+export function setCardHolderName() {}
 
 export async function searchCardByTypeAndEmployeeId(type, employeeId: number) {
   const searchedCard = await cardRepository.findByTypeAndEmployeeId(

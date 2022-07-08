@@ -3,7 +3,6 @@ import * as handleErrors from "../middlewares/handleErrors.js";
 
 export async function validateApiKey(apiKey: string) {
   const company = await companyRepository.findByApiKey(apiKey);
-  console.log(company);
 
   if (!company) throw handleErrors.unauthorizedError("x-api-key");
 
