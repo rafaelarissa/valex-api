@@ -23,6 +23,15 @@ export function conflictError(entity: string) {
   };
 }
 
+export function badRequestError(entity: string) {
+  return {
+    type: "bad_request",
+    message: entity
+      ? `The request isn't working, try a valid ${entity}!`
+      : `Bad request, please try again!`,
+  };
+}
+
 export default function handleErrorsMiddleware(
   err,
   req: Request,
@@ -32,6 +41,8 @@ export default function handleErrorsMiddleware(
   console.log(err);
   if (err.type === "unauthorized") return res.sendStatus(401);
   if (err.type === "not_found") return res.sendStatus(404);
+  if (err.type === "conflict") return res.sendStatus(409);
+  if (err.type === "bad_request") return res.sendStatus(400);
 
   res.sendStatus(500);
 }
