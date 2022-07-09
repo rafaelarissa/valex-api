@@ -15,9 +15,11 @@ export async function create(
 ) {
   await companyService.validateApiKey(apiKey);
 
-  await employeeService.validateEmployee(employeeId);
+  const employee = await employeeService.validateEmployee(employeeId);
 
   await searchCardByTypeAndEmployeeId(type, employeeId);
+
+  setCardHolderName(employee.fullName);
 }
 
 export function setCardNumber() {
@@ -42,9 +44,25 @@ export function setCardCVV() {
   return cryptr.encrypt(cvv);
 }
 
-export function setCardHolderName() {}
+function setCardHolderName(fullName: string) {
+  const fullNameArray = fullName.split(" ");
+  const lastName = fullNameArray.pop();
+  const firstName = fullNameArray.shift();
+  const middleNames = fullNameArray
+    .filter((middleName) => middleName.length >= 3)
+    .map((middleName) => {
+      return middleName[0];
+    });
 
-export async function searchCardByTypeAndEmployeeId(type, employeeId: number) {
+  middleNames.length > 0
+    ? [firstName, middleNames, lastName].join(" ").toUpperCase()
+    : [firstName, lastName].join(" ").toUpperCase();
+}
+
+export async function searchCardByTypeAndEmployeeId(
+  type: cardRepository.TransactionTypes,
+  employeeId: number
+) {
   const searchedCard = await cardRepository.findByTypeAndEmployeeId(
     type,
     employeeId
