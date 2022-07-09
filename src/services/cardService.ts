@@ -14,7 +14,10 @@ export async function create(
   type: cardRepository.TransactionTypes
 ) {
   await companyService.validateApiKey(apiKey);
+
   await employeeService.validateEmployee(employeeId);
+
+  await searchCardByTypeAndEmployeeId(type, employeeId);
 }
 
 export function setCardNumber() {
