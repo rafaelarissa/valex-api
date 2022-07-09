@@ -54,9 +54,10 @@ function setCardHolderName(fullName: string) {
       return middleName[0];
     });
 
-  middleNames.length > 0
-    ? [firstName, middleNames, lastName].join(" ").toUpperCase()
-    : [firstName, lastName].join(" ").toUpperCase();
+  if (middleNames.length > 0) {
+    return [firstName, middleNames, lastName].join(" ").toUpperCase();
+  }
+  return [firstName, lastName].join(" ").toUpperCase();
 }
 
 export async function searchCardByTypeAndEmployeeId(
