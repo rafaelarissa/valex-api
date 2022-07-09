@@ -4,6 +4,7 @@ import * as companyService from "../services/companyService.js";
 import * as employeeService from "../services/employeeService";
 import { checkCardValidation } from "../../utils/cardUtils.js";
 import { faker } from "@faker-js/faker";
+import dayjs from "dayjs";
 
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr(process.env.secret);
@@ -69,4 +70,8 @@ export async function searchCardByTypeAndEmployeeId(
     employeeId
   );
   if (searchedCard) throw handleError.conflictError("Card");
+}
+
+function setExpirationDate() {
+  return dayjs().add(5, "year");
 }
