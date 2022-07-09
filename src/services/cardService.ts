@@ -1,3 +1,4 @@
+import { CardInsertData } from "./../repositories/cardRepository";
 import * as cardRepository from "../repositories/cardRepository.js";
 import * as handleError from "../middlewares/handleErrors.js";
 import * as companyService from "../services/companyService.js";
@@ -20,7 +21,24 @@ export async function create(
 
   await searchCardByTypeAndEmployeeId(type, employeeId);
 
-  setCardHolderName(employee.fullName);
+  const cardData = generateCardData(employee.fullName);
+
+  await cardRepository.insert({
+    employeeId,
+    ...cardData,
+    isVirtual: false,
+    isBlocked: true,
+    type,
+  });
+}
+
+function generateCardData(employee: string) {
+  const cardholderName = setCardholderName(employee);
+  const number = setCardNumber();
+  const securityCode = setCardCVV();
+  const expirationDate = setExpirationDate();
+
+  return { cardholderName, number, securityCode, expirationDate };
 }
 
 export function setCardNumber() {
@@ -45,7 +63,7 @@ export function setCardCVV() {
   return cryptr.encrypt(cvv);
 }
 
-function setCardHolderName(fullName: string) {
+function setCardholderName(fullName: string) {
   const fullNameArray = fullName.split(" ");
   const lastName = fullNameArray.pop();
   const firstName = fullNameArray.shift();
@@ -73,5 +91,5 @@ export async function searchCardByTypeAndEmployeeId(
 }
 
 function setExpirationDate() {
-  return dayjs().add(5, "year");
+  return dayjs().add(5, "year").format("MM/YY");
 }
