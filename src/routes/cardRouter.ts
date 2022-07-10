@@ -13,4 +13,6 @@ cardRouter.post(
   cardController.create
 );
 
+cardRouter.patch("/cards/:id/activate", cardController.activate);
+
 export default cardRouter;
