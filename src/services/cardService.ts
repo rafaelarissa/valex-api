@@ -83,8 +83,11 @@ function setExpirationDate() {
 
 export async function activate(cardId: number) {
   const card = await searchCardById(cardId);
-  console.log(card);
+
   checkExpirationDate(card.expirationDate);
+
+  const isActive = card.password;
+  if (isActive) throw handleError.badRequestError("");
 }
 
 export async function searchCardById(cardId: number) {
