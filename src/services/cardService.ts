@@ -1,13 +1,11 @@
-import { CardInsertData } from "./../repositories/cardRepository";
 import * as cardRepository from "../repositories/cardRepository.js";
 import * as handleError from "../middlewares/handleErrors.js";
 import * as companyService from "../services/companyService.js";
-import * as employeeService from "../services/employeeService";
-import { checkCardValidation } from "../../utils/cardUtils.js";
+import * as employeeService from "../services/employeeService.js";
 import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
+import Cryptr from "cryptr";
 
-const Cryptr = require("cryptr");
 const cryptr = new Cryptr(process.env.secret);
 
 export async function create(
@@ -22,7 +20,6 @@ export async function create(
   await searchCardByTypeAndEmployeeId(type, employeeId);
 
   const cardData = generateCardData(employee.fullName);
-
   await cardRepository.insert({
     employeeId,
     ...cardData,
@@ -41,23 +38,13 @@ function generateCardData(employee: string) {
   return { cardholderName, number, securityCode, expirationDate };
 }
 
-export function setCardNumber() {
-  let number = faker.finance.creditCardNumber("mastercard");
-  let isNumber = checkCardValidation(number);
-
-  while (!isNumber) {
-    number = faker.finance.creditCardNumber("mastercard");
-    isNumber = checkCardValidation(number);
-
-    if (isNumber) {
-      break;
-    }
-  }
+function setCardNumber() {
+  let number = faker.finance.creditCardNumber();
 
   return number.split("-").join("");
 }
 
-export function setCardCVV() {
+function setCardCVV() {
   const cvv = faker.finance.creditCardCVV();
 
   return cryptr.encrypt(cvv);
