@@ -29,10 +29,6 @@ export async function create(
   });
 }
 
-export async function activate(cardId: number) {
-  await searchCardById(cardId);
-}
-
 function generateCardData(employee: string) {
   const cardholderName = setCardholderName(employee);
   const number = setCardNumber();
@@ -81,12 +77,28 @@ async function searchCardByTypeAndEmployeeId(
   if (searchedCard) throw handleError.conflictError("Card");
 }
 
-async function searchCardById(cardId: number) {
-  const existsCard = await cardRepository.findById(cardId);
-
-  if (!existsCard) throw handleError.notFoundError("Card");
-}
-
 function setExpirationDate() {
   return dayjs().add(5, "year").format("MM/YY");
+}
+
+export async function activate(cardId: number) {
+  const card = await searchCardById(cardId);
+  console.log(card);
+  checkExpirationDate(card.expirationDate);
+}
+
+export async function searchCardById(cardId: number) {
+  const card = await cardRepository.findById(cardId);
+
+  if (!card) throw handleError.notFoundError("Card");
+
+  return card;
+}
+
+function checkExpirationDate(expirationDate: string) {
+  const today = dayjs().format("MM/YY");
+
+  if (dayjs(today).isAfter(dayjs(expirationDate))) {
+    throw handleError.badRequestError("expiration date");
+  }
 }
