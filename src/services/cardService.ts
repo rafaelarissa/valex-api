@@ -29,6 +29,10 @@ export async function create(
   });
 }
 
+export async function activate(cardId: number) {
+  await searchCardById(cardId);
+}
+
 function generateCardData(employee: string) {
   const cardholderName = setCardholderName(employee);
   const number = setCardNumber();
@@ -66,7 +70,7 @@ function setCardholderName(fullName: string) {
   return [firstName, lastName].join(" ").toUpperCase();
 }
 
-export async function searchCardByTypeAndEmployeeId(
+async function searchCardByTypeAndEmployeeId(
   type: cardRepository.TransactionTypes,
   employeeId: number
 ) {
@@ -75,6 +79,12 @@ export async function searchCardByTypeAndEmployeeId(
     employeeId
   );
   if (searchedCard) throw handleError.conflictError("Card");
+}
+
+async function searchCardById(cardId: number) {
+  const existsCard = await cardRepository.findById(cardId);
+
+  if (!existsCard) throw handleError.notFoundError("Card");
 }
 
 function setExpirationDate() {

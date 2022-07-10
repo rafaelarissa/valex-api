@@ -8,3 +8,10 @@ export async function create(req: Request, res: Response) {
   await cardService.create(apiKey, employeeId, type);
   res.sendStatus(201);
 }
+
+export async function activate(req: Request, res: Response) {
+  const { id } = req.params;
+
+  await cardService.activate(Number(id));
+  res.sendStatus(200);
+}
