@@ -81,13 +81,15 @@ function setExpirationDate() {
   return dayjs().add(5, "year").format("MM/YY");
 }
 
-export async function activate(cardId: number) {
+export async function activate(cardId: number, cardCVV: string) {
   const card = await searchCardById(cardId);
 
   checkExpirationDate(card.expirationDate);
 
   const isActive = card.password;
   if (isActive) throw handleError.badRequestError("");
+
+  validateCVV(card.securityCode, cardCVV);
 }
 
 export async function searchCardById(cardId: number) {
@@ -104,4 +106,10 @@ function checkExpirationDate(expirationDate: string) {
   if (dayjs(today).isAfter(dayjs(expirationDate))) {
     throw handleError.badRequestError("expiration date");
   }
+}
+
+function validateCVV(encryptedCVV: string, cardCVV: string) {
+  const decryptedCVV = cryptr.decrypt(encryptedCVV);
+
+  if (decryptedCVV !== cardCVV) throw handleError.unauthorizedError("cvv");
 }
