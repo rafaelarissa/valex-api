@@ -124,3 +124,7 @@ function validateCVV(encryptedCVV: string, cardCVV: string) {
 
   if (decryptedCVV !== cardCVV) throw handleError.unauthorizedError("cvv");
 }
+
+export async function get(cardId: number) {
+  await searchCardById(cardId);
+}

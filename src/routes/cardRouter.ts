@@ -20,4 +20,6 @@ cardRouter.patch(
   cardController.activate
 );
 
+cardRouter.get("/cards/:id", cardController.get);
+
 export default cardRouter;

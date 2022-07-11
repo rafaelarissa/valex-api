@@ -16,3 +16,10 @@ export async function activate(req: Request, res: Response) {
   await cardService.activate(Number(id), cvv, password);
   res.sendStatus(200);
 }
+
+export async function get(req: Request, res: Response) {
+  const { id } = req.params;
+
+  await cardService.get(Number(id));
+  res.send("cheguei no get");
+}
