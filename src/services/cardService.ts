@@ -5,6 +5,7 @@ import * as employeeService from "../services/employeeService.js";
 import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
 import Cryptr from "cryptr";
+import bcrypt from "bcrypt";
 
 const cryptr = new Cryptr(process.env.secret);
 
@@ -24,7 +25,7 @@ export async function create(
     employeeId,
     ...cardData,
     isVirtual: false,
-    isBlocked: true,
+    isBlocked: false,
     type,
   });
 }
@@ -94,6 +95,10 @@ export async function activate(
   if (isActive) throw handleError.badRequestError("");
 
   validateCVV(card.securityCode, cardCVV);
+
+  const hashedPassword = bcrypt.hashSync(password, 10);
+
+  await cardRepository.update(cardId, { password: hashedPassword });
 }
 
 export async function searchCardById(cardId: number) {
