@@ -20,6 +20,6 @@ export async function activate(req: Request, res: Response) {
 export async function get(req: Request, res: Response) {
   const { id } = req.params;
 
-  await cardService.get(Number(id));
-  res.send("cheguei no get");
+  const transactionsData = await cardService.get(Number(id));
+  res.send(transactionsData);
 }

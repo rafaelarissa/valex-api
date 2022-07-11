@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 import * as cardRepository from "../repositories/cardRepository.js";
+import * as rechargeRepository from "../repositories/rechargeRepository.js";
+import * as paymentRepository from "../repositories/paymentRepository.js";
 import * as handleError from "../middlewares/handleErrors.js";
 import * as companyService from "../services/companyService.js";
 import * as employeeService from "../services/employeeService.js";
@@ -127,4 +129,31 @@ function validateCVV(encryptedCVV: string, cardCVV: string) {
 
 export async function get(cardId: number) {
   await searchCardById(cardId);
+
+  const recharges = await searchRechargesByCardId(cardId);
+  const transactions = await searchTransactionsByCardId(cardId);
+
+  const balance = recharges.amount - transactions.amount;
+
+  return {
+    balance,
+    transactions: {
+      ...transactions,
+    },
+    recharges: {
+      ...recharges,
+    },
+  };
+}
+
+export async function searchRechargesByCardId(cardId: number) {
+  const recharges = await rechargeRepository.findByCardId(cardId);
+
+  return recharges[0];
+}
+
+export async function searchTransactionsByCardId(cardId: number) {
+  const transactions = await paymentRepository.findByCardId(cardId);
+
+  return transactions[0];
 }
