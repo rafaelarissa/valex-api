@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import * as cardRepository from "../repositories/cardRepository.js";
 import * as handleError from "../middlewares/handleErrors.js";
 import * as companyService from "../services/companyService.js";
@@ -6,6 +7,7 @@ import { faker } from "@faker-js/faker";
 import dayjs from "dayjs";
 import Cryptr from "cryptr";
 import bcrypt from "bcrypt";
+dotenv.config();
 
 const cryptr = new Cryptr(process.env.secret);
 
