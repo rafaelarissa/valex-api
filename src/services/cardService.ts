@@ -81,7 +81,11 @@ function setExpirationDate() {
   return dayjs().add(5, "year").format("MM/YY");
 }
 
-export async function activate(cardId: number, cardCVV: string) {
+export async function activate(
+  cardId: number,
+  cardCVV: string,
+  password: string
+) {
   const card = await searchCardById(cardId);
 
   checkExpirationDate(card.expirationDate);

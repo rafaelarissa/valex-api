@@ -13,6 +13,6 @@ export async function activate(req: Request, res: Response) {
   const { id } = req.params;
   const { cvv, password } = req.body;
 
-  await cardService.activate(Number(id), cvv);
+  await cardService.activate(Number(id), cvv, password);
   res.sendStatus(200);
 }
