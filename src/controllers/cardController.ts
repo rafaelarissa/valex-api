@@ -23,3 +23,11 @@ export async function get(req: Request, res: Response) {
   const transactionsData = await cardService.get(Number(id));
   res.send(transactionsData);
 }
+
+export async function lockCard(req: Request, res: Response) {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  await cardService.lockCard(Number(id), password);
+  res.sendStatus(200);
+}

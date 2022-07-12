@@ -157,3 +157,21 @@ export async function searchTransactionsByCardId(cardId: number) {
 
   return transactions[0];
 }
+
+export async function lockCard(cardId: number, password: string) {
+  const card = await searchCardById(cardId);
+
+  checkExpirationDate(card.expirationDate);
+
+  if (card.isBlocked) throw handleError.badRequestError("");
+
+  validatePassword(password, card.password);
+
+  await cardRepository.update(cardId, { isBlocked: true });
+}
+
+function validatePassword(password: string, hashedPassword: string) {
+  if (!bcrypt.compareSync(password, hashedPassword)) {
+    throw handleError.unauthorizedError("password");
+  }
+}
