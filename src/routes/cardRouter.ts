@@ -5,6 +5,7 @@ import * as cardController from "../controllers/cardController.js";
 import cardSchema from "../schemas/cardSchema.js";
 import activateCardSchema from "../schemas/activateCardSchema.js";
 import lockUnlockCardSchema from "../schemas/lockUnlockCardSchema.js";
+import rechargeCardSchema from "../schemas/rechargeCardSchema.js";
 
 const cardRouter = Router();
 
@@ -33,6 +34,13 @@ cardRouter.patch(
   "/cards/:id/unlock",
   validateSchemaMiddleware(lockUnlockCardSchema),
   cardController.unlockCard
+);
+
+cardRouter.post(
+  "/cards/:id/recharge",
+  validateApiKey,
+  validateSchemaMiddleware(rechargeCardSchema),
+  cardController.rechargeCard
 );
 
 export default cardRouter;

@@ -113,7 +113,7 @@ export async function searchCardById(cardId: number) {
   return card;
 }
 
-function checkExpirationDate(expirationDate: string) {
+export function checkExpirationDate(expirationDate: string) {
   const today = dayjs().format("MM/YY");
 
   if (dayjs(today).isAfter(dayjs(expirationDate))) {
