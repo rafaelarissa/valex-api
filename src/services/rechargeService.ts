@@ -3,12 +3,11 @@ import * as cardService from "../services/cardService.js";
 import * as companyRepository from "../repositories/companyRepository.js";
 import * as employeeRepository from "../repositories/employeeRepository.js";
 import * as rechargeRepository from "../repositories/rechargeRepository.js";
-import { networkInterfaces } from "os";
 
 export async function recharge(cardId: number, amount: number, apiKey: string) {
   const card = await cardService.searchCardById(cardId);
 
-  if (!card.password) throw handleError.badRequestError("active card");
+  await cardService.checkActivation(cardId);
 
   cardService.checkExpirationDate(card.expirationDate);
 

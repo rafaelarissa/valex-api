@@ -182,8 +182,14 @@ export async function unlockCard(cardId: number, password: string) {
   await cardRepository.update(cardId, { isBlocked: false });
 }
 
-function validatePassword(password: string, hashedPassword: string) {
+export function validatePassword(password: string, hashedPassword: string) {
   if (!bcrypt.compareSync(password, hashedPassword)) {
     throw handleError.unauthorizedError("password");
   }
+}
+
+export async function checkActivation(cardId: number) {
+  const card = await searchCardById(cardId);
+
+  if (!card.password) throw handleError.badRequestError("active card");
 }
