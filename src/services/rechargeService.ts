@@ -1,7 +1,7 @@
 import * as handleError from "../middlewares/handleErrors.js";
 import * as cardService from "../services/cardService.js";
-import * as companyRepository from "../repositories/companyRepository.js";
-import * as employeeRepository from "../repositories/employeeRepository.js";
+import * as companyService from "../services/companyService.js";
+import * as employeeService from "../services/employeeService.js";
 import * as rechargeRepository from "../repositories/rechargeRepository.js";
 
 export async function recharge(cardId: number, amount: number, apiKey: string) {
@@ -11,8 +11,8 @@ export async function recharge(cardId: number, amount: number, apiKey: string) {
 
   cardService.checkExpirationDate(card.expirationDate);
 
-  const company = await companyRepository.findByApiKey(apiKey);
-  const employee = await employeeRepository.findById(card.employeeId);
+  const company = await companyService.validateApiKey(apiKey);
+  const employee = await employeeService.validateEmployee(card.employeeId);
 
   if (employee.companyId !== company.id)
     throw handleError.unauthorizedError("");
