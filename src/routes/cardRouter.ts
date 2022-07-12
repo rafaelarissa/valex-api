@@ -46,7 +46,7 @@ cardRouter.post(
 );
 
 cardRouter.post(
-  "/cards/:id/businesses/:businessId",
+  "/cards/:id/businesses/:businessId/payments",
   validateSchemaMiddleware(paymentSchema),
   paymentController.create
 );

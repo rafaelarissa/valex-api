@@ -3,7 +3,9 @@ import { NextFunction, Request, Response } from "express";
 export function unauthorizedError(entity: string) {
   return {
     type: "unauthorized",
-    message: `Your authorization failed. Please enter the correct ${entity}`,
+    message: entity
+      ? `Your authorization failed. Please enter the correct ${entity}`
+      : `Your authorization failed, please try again!`,
   };
 }
 
