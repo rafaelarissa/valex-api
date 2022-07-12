@@ -24,4 +24,6 @@ cardRouter.get("/cards/:id", cardController.get);
 
 cardRouter.patch("/cards/:id/lock", cardController.lockCard);
 
+cardRouter.patch("/cards/:id/unlock", cardController.unlockCard);
+
 export default cardRouter;

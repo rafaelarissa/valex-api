@@ -31,3 +31,11 @@ export async function lockCard(req: Request, res: Response) {
   await cardService.lockCard(Number(id), password);
   res.sendStatus(200);
 }
+
+export async function unlockCard(req: Request, res: Response) {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  await cardService.unlockCard(Number(id), password);
+  res.sendStatus(200);
+}

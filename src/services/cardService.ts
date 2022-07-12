@@ -51,7 +51,7 @@ function setCardNumber() {
 
 function setCardCVV() {
   const cvv = faker.finance.creditCardCVV();
-
+  console.log(cvv);
   return cryptr.encrypt(cvv);
 }
 
@@ -168,6 +168,18 @@ export async function lockCard(cardId: number, password: string) {
   validatePassword(password, card.password);
 
   await cardRepository.update(cardId, { isBlocked: true });
+}
+
+export async function unlockCard(cardId: number, password: string) {
+  const card = await searchCardById(cardId);
+
+  checkExpirationDate(card.expirationDate);
+
+  if (!card.isBlocked) throw handleError.badRequestError("");
+
+  validatePassword(password, card.password);
+
+  await cardRepository.update(cardId, { isBlocked: false });
 }
 
 function validatePassword(password: string, hashedPassword: string) {
