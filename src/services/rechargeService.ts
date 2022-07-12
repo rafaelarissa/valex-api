@@ -12,8 +12,8 @@ export async function recharge(cardId: number, amount: number, apiKey: string) {
 
   cardService.checkExpirationDate(card.expirationDate);
 
-  const company = await companyRepository.findByApiKey(apiKey); //buscar id da empresa pela chave
-  const employee = await employeeRepository.findById(card.employeeId); //buscar companyId na tabela de funcionarios
+  const company = await companyRepository.findByApiKey(apiKey);
+  const employee = await employeeRepository.findById(card.employeeId);
 
   if (employee.companyId !== company.id)
     throw handleError.unauthorizedError("");
